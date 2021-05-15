@@ -1,2 +1,6 @@
-# programming_2021project
-2021 project for the Programming course at HEC Lausanne
+# Project for the Programming class at HEC Lausanne (Spring Semester 2021)
+
+This project aims at implementing a chatbot system that is able to interact with incoming and current students enrolled at the University of Lausanne (UNIL). The chatbot is helping students by guiding them through the choice of courses, the university buildings (map), the office hours...
+
+Functions of the chatbot include:
+* Giving information about courses for bachelor/master/PhD students in a database in which students can find a course based on multiple criteria
