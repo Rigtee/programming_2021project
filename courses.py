@@ -193,3 +193,5 @@ display_courses(result2)
 params3 = {'course_name': 'adv'}
 result3 = search_information(params3)
 display_information(result3)
+
+print("hello")
