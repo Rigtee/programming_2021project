@@ -129,6 +129,8 @@ def search_courses(params):
     if len(params) > 0:
         filters = ['{}=?'.format(k) for k in params]
         query += ' WHERE ' + ' AND '.join(filters)
+    else:
+        print('Please specify parameters to search in the database.')
     t = tuple(params.values())
     c = conn.cursor()
     c.execute(query, t)
@@ -137,13 +139,57 @@ def search_courses(params):
         search_result.append(row[1])
     return search_result
 
+def search_information(params):
+    if len(params) > 0:
+        t = tuple(params.values())
+        keyword = str('%' + str(t) + '%')
+        bad_characters = ["'", "(", ")", ","]
+        newkeyword = ''.join(i for i in keyword if not i in bad_characters)
+        query = "SELECT * FROM courses WHERE course_name LIKE (?)"
+    else:
+        print('Please specify parameters to search in the database.')
+    c = conn.cursor()
+    c.execute(query, [newkeyword])
+    search_result = []
+    for row in c:
+        search_result.append(row[1])
+        search_result.append(row[2])
+        search_result.append(row[3])
+        search_result.append(row[4])
+    return search_result
 
 
-#print('Courses found are: ' + str(search_result))
 
-#course_professor, course_credits, course_quantitative = "S. Scheidegger", 6, "HQ"
+def display_courses(result):
+    if result:
+        print('Courses found: ' + str(result))
+    else:
+        print('No course was found based on your search criteria.')
+
+def display_information(result):
+    if result:
+        print('Information about the keyword found: ')
+        course = [result[i:i+4] for i in range(0, len(result), 4)]
+        for el in course:
+            if el[3] == "HQ":
+                el[3] = "highly quantitative"
+            elif el[3] == "SQ":
+                el[3] = "semi quantitative"
+            elif el[3] == "NQ":
+                el[3] = "non quantitative"
+
+            print("{course_name} given by {course_professor}, {course_credits} credits "
+                  "and having a {course_quantitative} scale.".format(course_name = el[0], course_professor = el[1],
+                                                                                 course_credits = el[2], course_quantitative = el[3]))
+
 params = {'course_professor':'S. Scheidegger', 'course_credits': 6, 'course_quantitative' : "HQ"}
 params2 = {'course_credits': 3, 'course_quantitative': 'SQ'}
-print(search_courses(params))
-print(search_courses(params2))
+result1 = search_courses(params)
+result2 = search_courses(params2)
 
+display_courses(result1)
+display_courses(result2)
+
+params3 = {'course_name': 'adv'}
+result3 = search_information(params3)
+display_information(result3)
