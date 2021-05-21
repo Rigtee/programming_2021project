@@ -1,0 +1,113 @@
+{"intents": [
+        {"tag": "greeting",
+         "patterns": ["Hi there", "Morning sweetheart", "Is anyone there?","Hey","Hola", "Hello", "Good day","Good morning"],
+         "responses": ["Hello!", "Hello there future student!", "Hoy hoy!", "Hi there, what can I do for you?"],
+         "context": [""]
+        },
+        {"tag": "real",
+         "patterns": ["Are your real?", "Are you a robot?"],
+         "responses": ["I am your guardian Angel. Please ask me question.", "Does it matter? I am here for you.", "I was wondering myself ;)"],
+         "context": [""]
+        },
+        {"tag": "university fee",
+         "patterns": ["How much should I pay as a student in this university?", "What about tuition fees ?","What are the tuition fees?","What are the administrative costs at unil?"],
+         "responses": ["Good question. Overall you need to pay 580 CHF per semester for a bachelor or a master. PhD students must pay 80 CHF per semester. Additional details are available through the link. Do you have another question ?"],
+         "context": ["https://www.unil.ch/immat/en/home/menuinst/futurs-etudiants/sinscrire/les-taxes-semestrielles.html"]
+        },
+        {"tag": "scholarship",
+         "patterns": ["Are scholarships available ?", "Is it possible to have a scholarship?","Are there financial helps for outstanding students ?"],
+         "responses": ["Yes, scholarships are indeed available for students with outstanding records. Unil grants for instance 10 scholarships every year. The deadline is the 1st begining of Novemeber. Others are also available as well but depends of your future studies. Please take a look at the different opportunities on the repsective pages"],
+         "context": ["https://www.unil.ch/international/en/home/menuinst/etudiants-internationaux/etudiantes-internationaux-reguliers/bourses-master-de-lunil.html"]
+        },
+        {"tag": "Housing",
+         "patterns": ["What should I rent ?", "What are there the housing posibilities?","Where should I live when I study at unil?"],
+         "responses": ["That's a thorny question. Different housing opportunities are available. FMEL is the most well-known association offering housing. Other private companies are also present in Lausanne. More information is available on the webpage"],
+         "context": ["https://www.unil.ch/sasme/en/home/menuinst/logement/chercher-un-logement.html"]
+        },
+        {"tag": "Housing cost",
+         "patterns": ["How much should I pay for a flat?", "Are a flat or a studio expensive ?","Housing cost?","Where should I live when I study at unil?"],
+         "responses": ["It depends on your needs. A flat in a shared appartment costs from 400 CHF to 600 CHF per month. Studio price ranges from 600 CHF to 1000 CHF. Do you need more information ?"],
+         "context": [""]
+        },
+        {"tag": "Application fee",
+         "patterns": ["application fee", "Do I need to pay to apply for a degree","Housing cost","Where should I live when I study at unil?"],
+         "responses": ["It depends on your needs. A flat in a shared appartment costs from 400 CHF to 600 CHF per month. Studio price ranges from 600 CHF to 1000 CHF. Do you need more information ?"],
+         "context": [""]
+        },
+        {"tag": "Visa",
+         "patterns": ["Visa application", "Do I need to apply for a visa?","Is a Visa needed to study in Switzerland ?","Where should I live when I study at unil?"],
+         "responses": ["Suiss students as well as residents from the Schengen area do not need a visa. Other students need one. Application must be done several months in advance. The student should be able to prove he can sustain itself (2100 CHF per month). See the link for further information"],
+         "context": ["https://www.unil.ch/immat/en/home/menuinst/futurs-etudiants/sinscrire/permis-pour-etudes---visa.html"]
+        },
+        {"tag": "lalala",
+         "patterns": ["Rapapa ?","Lalilo"],
+         "responses": ["Please learn to talk correctly", "Could you say it again?"],
+         "context": ["https://www.jeuxvideo.com/"]
+        },
+        {"tag": "goodbye",
+         "patterns": ["Bye", "See you later", "Goodbye", "Nice chatting to you, bye", "Till next time"],
+         "responses": ["See you!", "Have a nice day", "Bye! Come back again soon."],
+         "context": [""]
+        },
+        {"tag": "thanks",
+         "patterns": ["Thanks", "Thank you", "That's helpful", "Awesome, thanks", "Thanks for helping me"],
+         "responses": ["Happy to help!", "Any time!", "My pleasure"],
+         "context": [""]
+        },
+        {"tag": "noanswer",
+         "patterns": [],
+         "responses": ["Sorry, can't understand you", "Please give me more info", "Not sure I understand"],
+         "context": [""]
+        },
+        {"tag": "options",
+         "patterns": ["How you could help me?", "What you can do?", "What help you provide?", "How you can be helpful?", "What support is offered"],
+         "responses": ["I can guide you through Adverse drug reaction list, Blood pressure tracking, Hospitals and Pharmacies", "Offering support for Adverse drug reaction, Blood pressure, Hospitals and Pharmacies"],
+         "context": [""]
+        },
+        {"tag": "adverse_drug",
+         "patterns": ["How to check Adverse drug reaction?", "Open adverse drugs module", "Give me a list of drugs causing adverse behavior", "List all drugs suitable for patient with adverse reaction", "Which drugs dont have adverse reaction?" ],
+         "responses": ["Navigating to Adverse drug reaction module"],
+         "context": [""]
+        },
+        {"tag": "blood_pressure",
+         "patterns": ["Open blood pressure module", "Task related to blood pressure", "Blood pressure data entry", "I want to log blood pressure results", "Blood pressure data management" ],
+         "responses": ["Navigating to Blood Pressure module"],
+         "context": [""]
+        },
+        {"tag": "blood_pressure_search",
+         "patterns": ["I want to search for blood pressure result history", "Blood pressure for patient", "Load patient blood pressure result", "Show blood pressure results for patient", "Find blood pressure results by ID" ],
+         "responses": ["Please provide Patient ID", "Patient ID?"],
+         "context": ["search_blood_pressure_by_patient_id"]
+        },
+        {"tag": "search_blood_pressure_by_patient_id",
+         "patterns": [],
+         "responses": ["Loading Blood pressure result for Patient"],
+         "context": [""]
+        },
+        {"tag": "pharmacy_search",
+         "patterns": ["Find me a pharmacy", "Find pharmacy", "List of pharmacies nearby", "Locate pharmacy", "Search pharmacy" ],
+         "responses": ["Please provide pharmacy name"],
+         "context": ["search_pharmacy_by_name"]
+        },
+        {"tag": "search_pharmacy_by_name",
+         "patterns": [],
+         "responses": ["Loading pharmacy details"],
+         "context": [""]
+        },
+        {"tag": "hospital_search",
+         "patterns": ["Lookup for hospital", "Searching for hospital to transfer patient", "I want to search hospital data", "Hospital lookup for patient", "Looking up hospital details" ],
+         "responses": ["Please provide hospital name or location"],
+         "context": ["search_hospital_by_params"]
+        },
+        {"tag": "search_hospital_by_params",
+         "patterns": [],
+         "responses": ["Please provide hospital type"],
+         "context": ["search_hospital_by_type"]
+        },
+        {"tag": "search_hospital_by_type",
+         "patterns": [],
+         "responses": ["Loading hospital details"],
+         "context": [""]
+        }
+   ]
+}
