@@ -159,7 +159,6 @@ def search_information(params):
     return search_result
 
 
-
 def display_courses(result):
     if result:
         print('Courses found: ' + str(result))
@@ -167,7 +166,9 @@ def display_courses(result):
         print('No course was found based on your search criteria.')
 
 def display_information(result):
-    if result:
+    if not result:
+        print('Please enter a keyword to search inside the database.')
+    else:
         print('Information about the keyword found: ')
         course = [result[i:i+4] for i in range(0, len(result), 4)]
         for el in course:
@@ -190,7 +191,7 @@ result2 = search_courses(params2)
 display_courses(result1)
 display_courses(result2)
 
-params3 = {'course_name': 'adv'}
+params3 = {'course_name': 'finance'}
 result3 = search_information(params3)
 display_information(result3)
 
