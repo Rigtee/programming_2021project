@@ -22,27 +22,32 @@ words = []
 classes = []
 documents = []
 bad_characters = ['?', '!']  # characters to be avoided for training the model
-data = open('test_json/intents.json').read()
+data = open('intents.json').read() # test_json/
 intents = json.loads(data)
 
-for int in intents['intents']:
-    for pat in intents['patterns']:
+for ints in intents['intents']:
+    for pat in ints['patterns']:
 
         # NLTK function to tokenize each word
         word = nltk.word_tokenize(pat)
         words.extend(word)
         # Add the documents to our documents list
-        documents.append((word, int['tag']))
+        documents.append((word, ints['tag']))
 
         # Add the classes to our class list
-        if int['tag'] not in classes:  # adds everything that is new
-            classes.append(int['tag'])
+        if ints['tag'] not in classes:  # adds everything that is new
+            classes.append(ints['tag'])
+
+#words = [lemmatizer.lemmatize(word.lower()) for word in words if word not in bad_characters] #cancel plural and so on. Works with words, not list
+
+
+words_clean = []
 
 for word in words:
     if word not in bad_characters:  # to avoid taking unwanted characters
-        words = [lemmatizer.lemmatize(word.lower())]
+        words_clean.append(lemmatizer.lemmatize(word.lower()))
 
-words = sorted(list(set(words)))  # restores the variable in a sorted list of words
+words = sorted(list(set(words_clean)))  # restores the variable in a sorted list of words. Delete duplicates
 
 classes = sorted(list(set(classes)))  # same for classes
 
@@ -64,8 +69,13 @@ for doc in documents:
     # List of tokenized words for the pattern
     pattern_words = doc[0]
     # Lemmatize each word, i.e creating the base word to which all related words will be linked
-    for word in pattern_words:
-        pattern_words = lemmatizer.lemmatize(word.lower())
+    #for word in pattern_words:
+    #    pattern_words = lemmatizer.lemmatize(word.lower())
+    #for word in words:
+    #    bow.append(1) if word in pattern_words else bow.append(0)  # check for every words of the dictionary. Else 0
+
+    #for word in pattern_words:
+    #    pattern_words.append(lemmatizer.lemmatize(word.lower()))
     # We create our bag of words array like before: value if 1 if we match  the word found in current pattern
     for word in words:
         if word in pattern_words:
@@ -82,7 +92,7 @@ for doc in documents:
 
 # Now we will shuffle our features and turn them into a Numpy array (easier to analyze)
 random.shuffle(training_data)
-training = np.array(training_data)
+training_data = np.array(training_data,dtype=object)
 
 # As usual, we create train and test lists with X as patterns and Y as intents
 
@@ -99,7 +109,7 @@ model.add(Dense(128, input_shape=(len(train_X[0]),), activation='relu'))
 model.add(Dropout(0.5))
 model.add(Dense(64, activation='relu'))
 model.add(Dropout(0.5))
-model.add(Dense(len(train_y[0]), activation='softmax'))
+model.add(Dense(len(train_Y[0]), activation='softmax'))
 
 # Compilation of the model
 # A stochastic gradient descent with the Nesterov accelerated gradient gives good results for this model,

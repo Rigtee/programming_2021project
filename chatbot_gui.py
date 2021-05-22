@@ -11,23 +11,23 @@ lemmatizer = WordNetLemmatizer()
 
 chatbot_model = load_model('chatbot_model.h5') # this will load our model generated in machine-language
 
-intents = json.loads(open('test_json/intents.json').read())
+intents = json.loads(open('intents.json').read())
 words = pickle.load(open('words.pkl', 'rb'))
 classes = pickle.load(open('classes.pkl', 'rb'))
 
 
 def lemmatize_sentence(sentence):
-    words = nltk.word_tokenize(sentence)
-    words = [lemmatizer.lemmatize(word.lower()) for word in words]
-    return words
+    words_lem = nltk.word_tokenize(sentence)
+    words_lem = [lemmatizer.lemmatize(word.lower()) for word in words_lem]
+    return words_lem
 
 
 # This will return a bag of words in form of an array that can be equal to 0 (not present in the sentence) or to 1 (word present)
 def bagofwords(sentence, words, show_details=True):
     # First we will tokenize the sentence to separate the words
-    sentence_words = lemmatize_sentence(sentence)
+    words_lem = lemmatize_sentence(sentence)
     bow = [0] * len(words)
-    for s in sentence_words:
+    for s in words_lem:
         for i, w in enumerate(words): # where is the index and w the word
             if s == w:
                 # we assign one if the word is contained in our vocabulary
@@ -38,7 +38,7 @@ def bagofwords(sentence, words, show_details=True):
 
 # This function will calculate probabilities for each intent,
 # the chatbot will select the highest to provide an appropriate answer to the user
-def predict_class(sentence, model):
+"""def predict_class(sentence, model):
     # We arbitrarily define an error threshold and select the words that are above it
     bow = bagofwords(sentence, words, show_details=False)
     prediction = model.predict(np.array([bow]))[0]
@@ -52,7 +52,20 @@ def predict_class(sentence, model):
     for i in results:
         results_list.append({"Intent": classes[i[0]], "Probability": str(i[1])})
         # appends every class from the pickle file and its corresponding probability
-    return results_list
+    return results_list"""
+
+def predict_class(sentence, model):
+    # filter out predictions below a threshold
+    p = bagofwords(sentence, words,show_details=False)
+    res = model.predict(np.array([p]))[0]
+    ERROR_THRESHOLD = 0.05
+    results = [[i,r] for i,r in enumerate(res) if r>ERROR_THRESHOLD]
+    # sort by strength of probability
+    results.sort(key=lambda x: x[1], reverse=True)
+    return_list = []
+    for r in results:
+        return_list.append({"intent": classes[r[0]], "probability": str(r[1])})
+    return return_list
 
 
 def create_response(ints, intents_json): # Output is an intent coming from the JSON file
