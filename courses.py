@@ -124,7 +124,7 @@ INSERT INTO courses VALUES
 
 execute_query(conn, add_more_records)
 
-def search_courses(params):
+def search_information(params):
     query = "SELECT * FROM courses"
     if len(params) > 0:
         filters = ['{}=?'.format(k) for k in params]
@@ -137,9 +137,14 @@ def search_courses(params):
     search_result = []
     for row in c:
         search_result.append(row[1])
-    return search_result
+    if search_result:
+        print('Courses found: ')
+        for el in search_result:
+            print('{course_name}'.format(course_name = el))
+    else:
+        print('No course was found based on your search criteria.')
 
-def search_information(params):
+def search_course_name(params):
     if len(params) > 0:
         t = tuple(params.values())
         keyword = str('%' + str(t) + '%')
@@ -156,21 +161,9 @@ def search_information(params):
         search_result.append(row[2])
         search_result.append(row[3])
         search_result.append(row[4])
-    return search_result
-
-
-def display_courses(result):
-    if result:
-        print('Courses found: ' + str(result))
-    else:
-        print('No course was found based on your search criteria.')
-
-def display_information(result):
-    if not result:
-        print('Please enter a keyword to search inside the database.')
-    else:
+    if search_result:
         print('Information about the keyword found: ')
-        course = [result[i:i+4] for i in range(0, len(result), 4)]
+        course = [search_result[i:i+4] for i in range(0, len(search_result), 4)]
         for el in course:
             if el[3] == "HQ":
                 el[3] = "highly quantitative"
@@ -181,18 +174,54 @@ def display_information(result):
 
             print("{course_name} given by {course_professor}, {course_credits} credits "
                   "and having a {course_quantitative} scale.".format(course_name = el[0], course_professor = el[1],
-                                                                                 course_credits = el[2], course_quantitative = el[3]))
+                    course_credits = el[2], course_quantitative = el[3]))
+    else:
+        print("No course was found based on your keyword.")
+
+
+def search_professor_name(params):
+    if len(params) > 0:
+        t = tuple(params.values())
+        keyword = str('%' + str(t) + '%')
+        bad_characters = ["'", "(", ")", ","]
+        newkeyword = ''.join(i for i in keyword if not i in bad_characters)
+        query = "SELECT * FROM courses WHERE course_professor LIKE (?)"
+    else:
+        print('Please specify parameters to search in the database.')
+    c = conn.cursor()
+    c.execute(query, [newkeyword])
+    search_result = []
+    for row in c:
+        search_result.append(row[1])
+        search_result.append(row[2])
+        search_result.append(row[3])
+        search_result.append(row[4])
+    return search_result
+
+def display_professor_name(result):
+    print('Information about the keyword found: ')
+    course = [result[i:i+4] for i in range(0, len(result), 4)]
+    for el in course:
+        if el[3] == "HQ":
+            el[3] = "highly quantitative"
+        elif el[3] == "SQ":
+            el[3] = "semi quantitative"
+        elif el[3] == "NQ":
+            el[3] = "non quantitative"
+
+        print("{course_professor} gives the course {course_name} of {course_credits} credits "
+                "which has a {course_quantitative} scale.".format(course_professor = el[1], course_name = el[0],
+                 course_credits = el[2], course_quantitative = el[3]))
+    #else:
+        #print("No course was found based on your keyword.")
 
 params = {'course_professor':'S. Scheidegger', 'course_credits': 6, 'course_quantitative' : "HQ"}
-params2 = {'course_credits': 3, 'course_quantitative': 'SQ'}
-result1 = search_courses(params)
-result2 = search_courses(params2)
-
-display_courses(result1)
-display_courses(result2)
+params2 = {'course_quantitative': 'NQ'}
+result1 = search_information(params)
+result2 = search_information(params2)
 
 params3 = {'course_name': 'finance'}
-result3 = search_information(params3)
-display_information(result3)
+result3 = search_course_name(params3)
 
-print("hello")
+params4 = {'course_professor': 'valta'}
+result4 = search_professor_name(params4)
