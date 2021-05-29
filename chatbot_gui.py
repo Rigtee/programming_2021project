@@ -1,13 +1,14 @@
 import nltk  # Natural Language Toolkit that is used to work with human language data
 from nltk.stem import WordNetLemmatizer  # lemmatization is used to group words together based on similarity (variants)
 import pandas as pd # Used to create dataframes
-import datetime
+from datetime import datetime
 import pickle  # used to save a Python object in a binary format (serializing and de-serializing)
 import numpy as np
 from keras.models import load_model  # Keras is an open-source deep learning API
 import json  # used to store text files in an easy-to-read (for humans) and widely-used format
 import random  # will be used to choose among options to make the chatbot more natural
 from tkinter import * # to create the bot GUI
+import webbrowser # To open pages on a browser
 
 lemmatizer = WordNetLemmatizer()
 
@@ -80,11 +81,28 @@ def create_response(ints, intents_json): # Output is an intent coming from the J
             break
     return result
 
+def getLink(ints, intents_json):
+    tag = ints[0]['intent']
+    list_of_intents = intents_json['intents']
+    for i in list_of_intents:
+        if(i['tag']== tag):
+            result = random.choice(i['context'])
+            break
+    return result
 
 def bot_response(message):
     ints = predict_class(message, chatbot_model) # determines the intent of the message
     response = create_response(ints, intents) # finds accordingly a bot response
     return response
+
+def bot_response_link(message):
+    ints = predict_class(message, chatbot_model)
+    res = getLink(ints, intents)
+    return res
+
+def callback(url):
+    webbrowser.open_new(url)
+    
 
 # Main function to allow the user to interact with the bot (send a message)
 def send():
@@ -95,10 +113,30 @@ def send():
         chatLog.config(state=NORMAL)
         chatLog.insert(END, "USER: " + message + '\n\n') # Text box for the user: prints the message he typed
         chatLog.config(foreground="#442265", font=("Verdana", 12))
-
+        
         response = bot_response(message)
+        
+        try:
+            df = pd.read_csv('log_chatbox.txt')
+        except FileNotFoundError:
+            df = pd.DataFrame(columns=['Input', 'Output','Time','Date', 'Intents_predicted','Status','Language']) 
+        
+        reptest = predict_class(message, chatbot_model)
+        
+        new_row = {'Input': message,  'Output': response,'Time':datetime.time(datetime.now()),'Date':datetime.date(datetime.now()), 'Intents_predicted': reptest[0]['intent'],'Probability prediction':reptest[0]['probability'], 'Status':'Student', 'Language':'EN'}
+        #append row to the dataframe
+        df = df.append(new_row, ignore_index=True)
+        # Save the CSV file with the new line
+        df.to_csv('log_chatbox.txt',index=False)
+        
         chatLog.insert(END, "BOT: " + response + '\n\n') # Text box for the bot: prints the corresponding response
 
+        ras = bot_response_link(message)
+        
+        if ras:
+            callback(ras)
+            ChatLog.insert(END, "Bot: " + ras + '\n\n')
+            
         chatLog.config(state=DISABLED)
         chatLog.yview(END) # End of the conversation
 
