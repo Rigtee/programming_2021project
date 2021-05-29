@@ -1,5 +1,7 @@
 import nltk  # Natural Language Toolkit that is used to work with human language data
 from nltk.stem import WordNetLemmatizer  # lemmatization is used to group words together based on similarity (variants)
+import pandas as pd # Used to create dataframes
+import datetime
 import pickle  # used to save a Python object in a binary format (serializing and de-serializing)
 import numpy as np
 from keras.models import load_model  # Keras is an open-source deep learning API
