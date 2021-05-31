@@ -1,0 +1,12 @@
+Input,Output,Time,Date,Intents_predicted,Status,Language,Probability prediction
+HELLO,"Hi there, what can I do for you?",3,2021-05-30,92,97,EN,92.0
+LA REVANGE DES SITHS,Hello there future student!,01:10:22.432855,2021-05-30,92,97,EN,92.0
+grrrr,Hoy hoy!,01:10:35.275055,2021-05-30,92,97,EN,92.0
+Ni hao ma ?,Hoy hoy!,01:24:26.460854,2021-05-30,greeting,Student,EN,0.4264169
+Can I know a bit more about university fees ?,Good question. Overall you need to pay 580 CHF per semester for a bachelor or a master. PhD students must pay 80 CHF per semester. Additional details are available through the link. Do you have another question ?,01:33:32.483986,2021-05-30,university fee,Student,EN,0.4735322
+Thanks!,My pleasure,01:33:52.171184,2021-05-30,thanks,Student,EN,0.9845636999999999
+hello!,"Hi there, what can I do for you?",22:29:12.492979,2021-05-30,greeting,Student,EN,0.99798477
+hello!,Hoy hoy!,22:30:17.981954,2021-05-30,greeting,Student,EN,0.99798477
+hello!,Hello there future student!,22:37:04.869989,2021-05-30,greeting,Student,EN,0.4058611
+how are you?,Happy to help!,22:37:12.725985,2021-05-30,thanks,Student,EN,0.8937403
+I would like a scholarship!,"Yes, scholarships are indeed available for students with outstanding records. Unil grants for instance 10 scholarships every year. The deadline is the 1st begining of Novemeber. Others are also available as well but depends of your future studies. Please take a look at the different opportunities on the repsective pages",01:20:14.623616,2021-05-31,scholarship,Student,EN,0.9413728

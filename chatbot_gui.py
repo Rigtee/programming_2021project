@@ -100,7 +100,10 @@ def bot_response_link(message):
     res = getLink(ints, intents)
     return res
 
+# Shorter version of webbrowser.open_new() function. It allows to open links in a browser
+
 def callback(url):
+
     webbrowser.open_new(url)
     
 
@@ -111,31 +114,63 @@ def send():
 
     if message != '': # if the user has typed a message (not empty)
         chatLog.config(state=NORMAL)
+
+        # Send the first message to the chatbot with the message from the user
+
         chatLog.insert(END, "USER: " + message + '\n\n') # Text box for the user: prints the message he typed
         chatLog.config(foreground="#442265", font=("Verdana", 12))
+
+        # Using the message, analyzed it and then pick an answer attributed ot reponse
         
         response = bot_response(message)
+
+        # Try to open the log_chatbox.txt
         
         try:
+
             df = pd.read_csv('log_chatbox.txt')
+
+        # If it raises an error, create a new file with the column names
+
         except FileNotFoundError:
-            df = pd.DataFrame(columns=['Input', 'Output','Time','Date', 'Intents_predicted','Status','Language']) 
-        
+
+            df = pd.DataFrame(columns=['Input', 'Output','Time','Date', 'Intents_predicted','Status','Language'])
+
+        # Analyze what the model is predicting as well as the probability level
+
         reptest = predict_class(message, chatbot_model)
+
+        # Create a new row for the log chatbox
         
         new_row = {'Input': message,  'Output': response,'Time':datetime.time(datetime.now()),'Date':datetime.date(datetime.now()), 'Intents_predicted': reptest[0]['intent'],'Probability prediction':reptest[0]['probability'], 'Status':'Student', 'Language':'EN'}
-        #append row to the dataframe
+
+        # Append row of log to the dataframe
+
         df = df.append(new_row, ignore_index=True)
+
         # Save the CSV file with the new line
+
         df.to_csv('log_chatbox.txt',index=False)
+
+        # Output the message of the machine
         
         chatLog.insert(END, "BOT: " + response + '\n\n') # Text box for the bot: prints the corresponding response
 
+        # Extract the link from the intent predicted
+
         ras = bot_response_link(message)
+
+        # If there is no link, nothing happened
         
         if ras:
+
+            # If a link exists, it is opened in a browser
+
             callback(ras)
-            ChatLog.insert(END, "Bot: " + ras + '\n\n')
+
+            # A message with the link is also put in the browser
+
+            chatLog.insert(END, "Bot: " + ras + '\n\n')
             
         chatLog.config(state=DISABLED)
         chatLog.yview(END) # End of the conversation
@@ -147,25 +182,31 @@ base.geometry("400x500")
 base.resizable(width=FALSE, height=FALSE)
 
 # This will create the graphical interface for the chat window
+
 chatLog = Text(base, bd=0, bg="white", height="8", width="50", font="Arial")
 
 chatLog.config(state=DISABLED)
 
 # This will bind the scrollbar to the chat window
+
 scrollBar = Scrollbar(base, command=chatLog.yview, cursor="heart")
 chatLog['yscrollcommand'] = scrollBar.set
 
 # This button will send the message to the program, to which the bot will respond
+
 sendButton = Button(base, font=("Verdana", 12, 'bold'), text="Send", width="12", height=5,
                     bd=0, bg="#32de97", activebackground="#3c9d9b", fg='#ffffff',
                     command=send) # it activates the main function of our program, the 'send' function.
 
 # This will create a box to allow the user typing his message
+
 entryBox = Text(base, bd=0, bg="white", width="29", height="5", font="Arial")
+
 # entryBox.bind("<Return>", send)
 
 
 # Let's now place all components of the GUI on the screen
+
 scrollBar.place(x=376, y=6, height=386)
 chatLog.place(x=6, y=6, height=386, width=370)
 entryBox.place(x=128, y=401, height=90, width=265)
