@@ -4,9 +4,25 @@ LA REVANGE DES SITHS,Hello there future student!,01:10:22.432855,2021-05-30,92,9
 grrrr,Hoy hoy!,01:10:35.275055,2021-05-30,92,97,EN,92.0
 Ni hao ma ?,Hoy hoy!,01:24:26.460854,2021-05-30,greeting,Student,EN,0.4264169
 Can I know a bit more about university fees ?,Good question. Overall you need to pay 580 CHF per semester for a bachelor or a master. PhD students must pay 80 CHF per semester. Additional details are available through the link. Do you have another question ?,01:33:32.483986,2021-05-30,university fee,Student,EN,0.4735322
-Thanks!,My pleasure,01:33:52.171184,2021-05-30,thanks,Student,EN,0.9845636999999999
+Thanks!,My pleasure,01:33:52.171184,2021-05-30,thanks,Student,EN,0.9845637
 hello!,"Hi there, what can I do for you?",22:29:12.492979,2021-05-30,greeting,Student,EN,0.99798477
 hello!,Hoy hoy!,22:30:17.981954,2021-05-30,greeting,Student,EN,0.99798477
 hello!,Hello there future student!,22:37:04.869989,2021-05-30,greeting,Student,EN,0.4058611
 how are you?,Happy to help!,22:37:12.725985,2021-05-30,thanks,Student,EN,0.8937403
 I would like a scholarship!,"Yes, scholarships are indeed available for students with outstanding records. Unil grants for instance 10 scholarships every year. The deadline is the 1st begining of Novemeber. Others are also available as well but depends of your future studies. Please take a look at the different opportunities on the repsective pages",01:20:14.623616,2021-05-31,scholarship,Student,EN,0.9413728
+Hello,"Hi there, what can I do for you?",15:31:16.276576,2021-06-05,greeting,Student,EN,0.40586108
+courses,"Hi there, what can I do for you?",15:31:23.199917,2021-06-05,greeting,Student,EN,0.42621285
+I want to search for courses,Please provide hospital name or location,15:31:43.989698,2021-06-05,hospital_search,Student,EN,0.99799144
+I want to search for teachers,Please provide hospital name or location,15:32:44.300226,2021-06-05,hospital_search,Student,EN,0.99799144
+I want to search for teachers,Please provide hospital name or location,15:32:47.551726,2021-06-05,hospital_search,Student,EN,0.99799144
+I want to search for teachers,Please let me help you to find information about professors. I can search professors based on keywords.,15:33:58.033031,2021-06-05,professors,Student,EN,0.8698341
+I want to search for courses,Please let me help you to find information about professors. I can search professors based on keywords.,15:34:08.679173,2021-06-05,professors,Student,EN,0.85898274
+I want courses,See you!,15:34:17.041780,2021-06-05,goodbye,Student,EN,0.19791017
+Where can I find new courses?,Please let me help you to find information about courses. I can search courses based on keywords or filters.,15:34:43.235538,2021-06-05,courses,Student,EN,0.99288505
+Where can I find the name of professors?,Please let me help you to find information about professors. I can search professors based on keywords.,15:34:59.724430,2021-06-05,professors,Student,EN,0.99987996
+Hello,"Hi there, what can I do for you?",16:00:13.483738,2021-06-05,greeting,Student,EN,0.24555483
+I want courses,Have a nice day,16:00:26.260423,2021-06-05,goodbye,Student,EN,0.19791017
+Where can I find new courses?,Please let me help you to find information about courses. I can search courses based on keywords or filters.,16:00:33.596872,2021-06-05,courses,Student,EN,0.99288505
+Bring it on,Any time!,16:00:51.741523,2021-06-05,thanks,Student,EN,0.34561378
+Hello,Hello there future student!,16:20:51.584232,2021-06-05,greeting,Student,EN,0.24555483
+I want to search for courses,Please let me help you to find information about professors. I can search professors based on keywords.,16:21:11.809943,2021-06-05,professors,Student,EN,0.85898274

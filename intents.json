@@ -36,8 +36,18 @@
         },
         {"tag": "Visa",
          "patterns": ["Visa application", "Do I need to apply for a visa?","Is a Visa needed to study in Switzerland ?","Where should I live when I study at unil?"],
-         "responses": ["Suiss students as well as residents from the Schengen area do not need a visa. Other students need one. Application must be done several months in advance. The student should be able to prove he can sustain itself (2100 CHF per month). See the link for further information"],
+         "responses": ["Swiss students as well as residents from the Schengen area do not need a visa. Other students need one. Application must be done several months in advance. The student should be able to prove he can sustain itself (2100 CHF per month). See the link for further information"],
          "context": ["https://www.unil.ch/immat/en/home/menuinst/futurs-etudiants/sinscrire/permis-pour-etudes---visa.html"]
+        },
+        {"tag": "courses",
+          "patterns": ["I want to search for courses", "Where can I find new courses?", "What are the courses available for the semester?", "Can you give me information about the program at UNIL?"],
+          "responses": ["Please let me help you to find information about courses. I can search courses based on keywords or filters."],
+          "context" : []
+        },
+      {"tag": "professors",
+          "patterns": ["I want to search for professors", "I want to search for teachers", "Where can I find the name of professors?", "What are the teachers of this faculty?", "Can you give me information about teachers at UNIL?"],
+          "responses": ["Please let me help you to find information about professors. I can search professors based on keywords."],
+          "context" : []
         },
         {"tag": "lalala",
          "patterns": ["Rapapa ?","Lalilo"],

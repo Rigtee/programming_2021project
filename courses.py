@@ -21,19 +21,11 @@ course_credits INT NOT NULL,
 course_quantitative VARCHAR(2));
 """
 
-execute_query(conn, create_courses_table)
-
 add_records = """
 INSERT INTO courses VALUES
 (1, "Droit des marchés financiers", "A. Richa", 3, "NQ"),
 (2, "Programming", "S. Scheidegger", 6, "HQ"),
-(3, "Financial Analysis", "J. Froidevaux", 6, "HQ");
-"""
-
-execute_query(conn, add_records)
-
-add_more_records = """
-INSERT INTO courses VALUES
+(3, "Financial Analysis", "J. Froidevaux", 6, "HQ")
 (4, "Fixed Income and Credit Risk", "M. Rockinger", 6, "HQ"),
 (5, "Empirical Methods in Finance", "F. Ielpo", 6, "HQ"),
 (6, "Advanced Data Analytics", "S. Scheidegger", 6, "HQ"),
@@ -122,7 +114,10 @@ INSERT INTO courses VALUES
 (89, "Company Project in Marketing", "A. Dabrowska-Leszcynska", 6, "NQ");
 """
 
-execute_query(conn, add_more_records)
+# Code that won't be executed when importing to another py file
+if __name__ == '__main__':
+    execute_query(conn, create_courses_table)
+    execute_query(conn, add_records)
 
 def search_information(params):
     query = "SELECT * FROM courses"
@@ -130,19 +125,21 @@ def search_information(params):
         filters = ['{}=?'.format(k) for k in params]
         query += ' WHERE ' + ' AND '.join(filters)
     else:
-        print('Please specify parameters to search in the database.')
+        result = 'Please specify parameters to search in the database.'
+        return result
     t = tuple(params.values())
     c = conn.cursor()
     c.execute(query, t)
     search_result = []
     for row in c:
         search_result.append(row[1])
+    print(search_result)
     if search_result:
         print('Courses found: ')
-        for el in search_result:
-            print('{course_name}'.format(course_name = el))
+        return search_result
     else:
-        print('No course was found based on your search criteria.')
+        search_result = 'No course was found based on your search criteria.'
+        return search_result
 
 def search_course_name(params):
     if len(params) > 0:
@@ -152,7 +149,49 @@ def search_course_name(params):
         newkeyword = ''.join(i for i in keyword if not i in bad_characters)
         query = "SELECT * FROM courses WHERE course_name LIKE (?)"
     else:
-        print('Please specify parameters to search in the database.')
+        result = 'Please specify parameters to search in the database.'
+        return result
+    c = conn.cursor()
+    c.execute(query, [newkeyword])
+    search_result = []
+    for row in c:
+        search_result.append(row[1])
+        search_result.append(row[2])
+        search_result.append(row[3])
+        search_result.append(row[4])
+    print(search_result)
+    if search_result:
+        print('Information about the keyword found: ')
+        course = [search_result[i:i+4] for i in range(0, len(search_result), 4)]
+        print(course)
+        results = []
+        for el in course:
+            if el[3] == "HQ":
+                el[3] = "highly quantitative"
+            elif el[3] == "SQ":
+                el[3] = "semi quantitative"
+            elif el[3] == "NQ":
+                el[3] = "non quantitative"
+
+            result = ("{course_name} given by {course_professor}, {course_credits} credits and having a {course_quantitative} scale."
+            .format(course_name = el[0], course_professor = el[1], course_credits = el[2], course_quantitative = el[3]))
+            results.append(result)
+        return results
+    else:
+        result = "No course was found based on your keyword."
+        return result
+
+
+def search_professor_name(params):
+    if len(params) > 0:
+        t = tuple(params.values())
+        keyword = str('%' + str(t) + '%')
+        bad_characters = ["'", "(", ")", ","]
+        newkeyword = ''.join(i for i in keyword if not i in bad_characters)
+        query = "SELECT * FROM courses WHERE course_professor LIKE (?)"
+    else:
+        result = 'Please specify parameters to search in the database.'
+        return result
     c = conn.cursor()
     c.execute(query, [newkeyword])
     search_result = []
@@ -171,57 +210,17 @@ def search_course_name(params):
                 el[3] = "semi quantitative"
             elif el[3] == "NQ":
                 el[3] = "non quantitative"
-
-            print("{course_name} given by {course_professor}, {course_credits} credits "
-                  "and having a {course_quantitative} scale.".format(course_name = el[0], course_professor = el[1],
-                    course_credits = el[2], course_quantitative = el[3]))
+        result = ("{course_professor} gives the course {course_name} of {course_credits} credits "
+                  "which has a {course_quantitative} scale."
+                  .format(course_professor = el[1], course_name = el[0],
+                                                          course_credits = el[2], course_quantitative = el[3]))
+        return result
     else:
-        print("No course was found based on your keyword.")
+        result = "No professor was found based on your keyword."
+        return result
 
 
-def search_professor_name(params):
-    if len(params) > 0:
-        t = tuple(params.values())
-        keyword = str('%' + str(t) + '%')
-        bad_characters = ["'", "(", ")", ","]
-        newkeyword = ''.join(i for i in keyword if not i in bad_characters)
-        query = "SELECT * FROM courses WHERE course_professor LIKE (?)"
-    else:
-        print('Please specify parameters to search in the database.')
-    c = conn.cursor()
-    c.execute(query, [newkeyword])
-    search_result = []
-    for row in c:
-        search_result.append(row[1])
-        search_result.append(row[2])
-        search_result.append(row[3])
-        search_result.append(row[4])
-    return search_result
 
-def display_professor_name(result):
-    print('Information about the keyword found: ')
-    course = [result[i:i+4] for i in range(0, len(result), 4)]
-    for el in course:
-        if el[3] == "HQ":
-            el[3] = "highly quantitative"
-        elif el[3] == "SQ":
-            el[3] = "semi quantitative"
-        elif el[3] == "NQ":
-            el[3] = "non quantitative"
 
-        print("{course_professor} gives the course {course_name} of {course_credits} credits "
-                "which has a {course_quantitative} scale.".format(course_professor = el[1], course_name = el[0],
-                 course_credits = el[2], course_quantitative = el[3]))
-    #else:
-        #print("No course was found based on your keyword.")
 
-params = {'course_professor':'S. Scheidegger', 'course_credits': 6, 'course_quantitative' : "HQ"}
-params2 = {'course_quantitative': 'NQ'}
-result1 = search_information(params)
-result2 = search_information(params2)
 
-params3 = {'course_name': 'finance'}
-result3 = search_course_name(params3)
-
-params4 = {'course_professor': 'valta'}
-result4 = search_professor_name(params4)

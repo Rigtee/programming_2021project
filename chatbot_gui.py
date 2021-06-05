@@ -1,4 +1,4 @@
-import nltk  # Natural Language Toolkit that is used to work with human language data
+import nltk # Natural Language Toolkit that is used to work with human language data
 from nltk.stem import WordNetLemmatizer  # lemmatization is used to group words together based on similarity (variants)
 import pandas as pd # Used to create dataframes
 from datetime import datetime
@@ -9,6 +9,19 @@ import json  # used to store text files in an easy-to-read (for humans) and wide
 import random  # will be used to choose among options to make the chatbot more natural
 from tkinter import * # to create the bot GUI
 import webbrowser # To open pages on a browser
+from courses import *
+import distutils.util
+
+# import ssl
+#
+# try:
+#     _create_unverified_https_context = ssl._create_unverified_context
+# except AttributeError:
+#     pass
+# else:
+#     ssl._create_default_https_context = _create_unverified_https_context
+#
+# nltk.download()
 
 lemmatizer = WordNetLemmatizer()
 
@@ -17,7 +30,6 @@ chatbot_model = load_model('chatbot_model.h5') # this will load our model genera
 intents = json.loads(open('intents.json').read())
 words = pickle.load(open('words.pkl', 'rb'))
 classes = pickle.load(open('classes.pkl', 'rb'))
-
 
 def lemmatize_sentence(sentence):
     words_lem = nltk.word_tokenize(sentence)
@@ -106,6 +118,7 @@ def callback(url):
 
     webbrowser.open_new(url)
     
+state = 0
 
 # Main function to allow the user to interact with the bot (send a message)
 def send():
@@ -113,6 +126,8 @@ def send():
     entryBox.delete("0.0", END)
 
     if message != '': # if the user has typed a message (not empty)
+        global state
+        print(state)
         chatLog.config(state=NORMAL)
 
         # Send the first message to the chatbot with the message from the user
@@ -120,57 +135,165 @@ def send():
         chatLog.insert(END, "USER: " + message + '\n\n') # Text box for the user: prints the message he typed
         chatLog.config(foreground="#442265", font=("Verdana", 12))
 
-        # Using the message, analyzed it and then pick an answer attributed ot reponse
-        
-        response = bot_response(message)
+        # Using the message, analyzed it and then pick an answer attributed ot response
+
+        if state == 0:
+            response = bot_response(message)
+            chatLog.insert(END, "BOT: " + response + '\n\n')
+            print(response)
+            course_response = intents["intents"][8]["responses"][0]  # last 0 needed to isolate element of list "responses", otherwise prints with []
+            professor_response = intents["intents"][9]["responses"][0]
+            if response == course_response:
+                state = 1
+                print(state)
+
+            elif response == professor_response:
+                state = 2
+                print(state)
+
+        elif state == 1:
+            print(state)
+            ask_search = "I will gladly help you to find courses! Type '1' to search by keyword and '2' by filters."
+            chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+            state = 10
+
+        elif state == 10:
+            if message == '1':
+                ask_search = "Enter a keyword to find courses:"
+                chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+                state = 11
+                print(state)
+            elif message == '2':
+                ask_search = "Here you can filter courses based on parameters, mainly the number of credits or " \
+                             "the quantitative scale (HQ, SQ or NQ for high, semi or no quantitative respectively). "
+                chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+                ask_credits = "Enter the number of credits you look for:"
+                chatLog.insert(END, "BOT: " + ask_credits + '\n\n')
+                state = 12
+                print(state)
+            else:
+                print(state)
+                bad_input = "Sorry, I did not understand. Please try again by entering '1' for keyword and '2' for filters."
+                chatLog.insert(END, "BOT: " + bad_input + '\n\n')
+
+        elif state == 11:
+            keyword_course = {"course_name": message}
+            output = search_course_name(keyword_course)
+            print(type(output))
+            chatLog.insert(END, "BOT: " '\n')
+            for i in range(len(output)):
+                chatLog.insert(END, output[i] + '\n')
+            ask_search = "Would you like to search for another course?"
+            chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+            state = 14
+
+        elif state == 12:
+            information = {"course_credits": message}
+            ask_search = "Enter HQ, SQ or NQ to filter the quantitative scale: "
+            chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+            state = 13
+
+        elif state == 13:
+            information = {"course_quantitative": message}
+            output = search_information(information)
+            print(type(output))
+            chatLog.insert(END, "BOT: " '\n')
+            for i in range(len(output)):
+                chatLog.insert(END, output[i] + '\n')
+            ask_search = "Would you like to search for another course?"
+            chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+            state = 14
+
+        elif state == 14:
+            new_search = bool(distutils.util.strtobool(message))
+            print(new_search)
+            if new_search:
+                ask_search = "Type '1' to search by keyword and '2' by filters."
+                chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+                state = 10
+            else:
+                ask_continue = "What can I do for you now?"
+                chatLog.insert(END, "BOT: " + ask_continue + '\n\n')
+                state = 0
+
+        elif state == 2:
+            ask_search = "Here you can find professors based on keywords." \
+                         "\nThe search is made to match last names in any position of the word. " \
+                         "\nEnter a keyword to find professors:"
+            chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+            state = 20
+
+        elif state == 20:
+            print(state)
+            keyword_professor = {"course_professor": message}
+            output = search_professor_name(keyword_professor)
+            print(type(output))
+            ask_search = "Would you like to search for another professor?"
+            chatLog.insert(END, "BOT: " + output + '\n'+ ask_search + '\n\n')
+            state = 21
+
+        elif state == 21:
+            new_search = bool(distutils.util.strtobool(message))
+            print(new_search)
+            if new_search:
+                ask_search = "Enter a keyword to find professors:"
+                chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+                state = 20
+            else:
+                ask_continue = "What can I do for you now?"
+                chatLog.insert(END, "BOT: " + ask_continue + '\n\n')
+                state = 0
+
+        # function search courses
 
         # Try to open the log_chatbox.txt
-        
-        try:
 
-            df = pd.read_csv('log_chatbox.txt')
 
-        # If it raises an error, create a new file with the column names
-
-        except FileNotFoundError:
-
-            df = pd.DataFrame(columns=['Input', 'Output','Time','Date', 'Intents_predicted','Status','Language'])
-
-        # Analyze what the model is predicting as well as the probability level
-
-        reptest = predict_class(message, chatbot_model)
-
-        # Create a new row for the log chatbox
-        
-        new_row = {'Input': message,  'Output': response,'Time':datetime.time(datetime.now()),'Date':datetime.date(datetime.now()), 'Intents_predicted': reptest[0]['intent'],'Probability prediction':reptest[0]['probability'], 'Status':'Student', 'Language':'EN'}
-
-        # Append row of log to the dataframe
-
-        df = df.append(new_row, ignore_index=True)
-
-        # Save the CSV file with the new line
-
-        df.to_csv('log_chatbox.txt',index=False)
+        # try:
+        #
+        #     df = pd.read_csv('log_chatbox.txt')
+        #
+        # # If it raises an error, create a new file with the column names
+        #
+        # except FileNotFoundError:
+        #
+        #     df = pd.DataFrame(columns=['Input', 'Output','Time','Date', 'Intents_predicted','Status','Language'])
+        #
+        # # Analyze what the model is predicting as well as the probability level
+        #
+        # reptest = predict_class(message, chatbot_model)
+        #
+        # # Create a new row for the log chatbox
+        #
+        # new_row = {'Input': message,  'Output': response,'Time':datetime.time(datetime.now()),'Date':datetime.date(datetime.now()), 'Intents_predicted': reptest[0]['intent'],'Probability prediction':reptest[0]['probability'], 'Status':'Student', 'Language':'EN'}
+        #
+        # # Append row of log to the dataframe
+        #
+        # df = df.append(new_row, ignore_index=True)
+        #
+        # # Save the CSV file with the new line
+        #
+        # df.to_csv('log_chatbox.txt',index=False)
 
         # Output the message of the machine
         
-        chatLog.insert(END, "BOT: " + response + '\n\n') # Text box for the bot: prints the corresponding response
+        #chatLog.insert(END, "BOT: " + response + '\n\n') # Text box for the bot: prints the corresponding response
 
         # Extract the link from the intent predicted
 
-        ras = bot_response_link(message)
-
-        # If there is no link, nothing happened
-        
-        if ras:
-
-            # If a link exists, it is opened in a browser
-
-            callback(ras)
-
-            # A message with the link is also put in the browser
-
-            chatLog.insert(END, "Bot: " + ras + '\n\n')
+        # ras = bot_response_link(message)
+        #
+        # # If there is no link, nothing happened
+        #
+        # if ras:
+        #
+        #     # If a link exists, it is opened in a browser
+        #
+        #     callback(ras)
+        #
+        #     # A message with the link is also put in the browser
+        #
+        #     chatLog.insert(END, "Bot: " + ras + '\n\n')
             
         chatLog.config(state=DISABLED)
         chatLog.yview(END) # End of the conversation
