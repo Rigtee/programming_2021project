@@ -125,7 +125,7 @@ def send():
     message = entryBox.get("1.0", 'end-1c').strip()
     entryBox.delete("0.0", END)
 
-    if message != '': # if the user has typed a message (not empty)
+    if message != '': # if the user has typed a message that is not empty
         global state
         print(state)
         chatLog.config(state=NORMAL)
@@ -138,26 +138,36 @@ def send():
         # Using the message, analyzed it and then pick an answer attributed ot response
 
         if state == 0:
-            response = bot_response(message)
-            chatLog.insert(END, "BOT: " + response + '\n\n')
-            print(response)
-            course_response = intents["intents"][8]["responses"][0]  # last 0 needed to isolate element of list "responses", otherwise prints with []
-            professor_response = intents["intents"][9]["responses"][0]
-            if response == course_response:
-                state = 1
-                print(state)
+            if message == 'help':
+                response = "I'm a versatile bot, I could do many things for you like:" \
+                           "\n - Searching in the database of HEC courses" \
+                           "\n - Finding a professor among the faculty" \
+                           "\n - Giving you information about student housing" \
+                           "\n - Describing the process to get a visa for Switzerland" \
+                           "\n - ..." \
+                           "\n The importance is to be clear about the thing you're looking for! If you do so, my robot neural net will be able" \
+                           " to process information more efficiently to provide you with an accurate answer. What can I do for you now?"
+                chatLog.insert(END, "BOT: " + response + '\n\n')
+            else:
+                response = bot_response(message)
+                chatLog.insert(END, "BOT: " + response + '\n\n')
+                course_response = intents["intents"][8]["responses"][0]  # last 0 needed to isolate element of list "responses", otherwise prints with []
+                professor_response = intents["intents"][9]["responses"][0]
+                if response == course_response:
+                    ask_search = "Type '1' to search by keyword and '2' by filters."
+                    chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+                    state = 1
+                    print(state)
 
-            elif response == professor_response:
-                state = 2
-                print(state)
+                elif response == professor_response:
+                    ask_search = "The search is made to match last names in any position of the word. " \
+                                 "\nEnter a keyword to find professors:"
+                    chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+                    state = 2
+                    print(state)
+
 
         elif state == 1:
-            print(state)
-            ask_search = "I will gladly help you to find courses! Type '1' to search by keyword and '2' by filters."
-            chatLog.insert(END, "BOT: " + ask_search + '\n\n')
-            state = 10
-
-        elif state == 10:
             if message == '1':
                 ask_search = "Enter a keyword to find courses:"
                 chatLog.insert(END, "BOT: " + ask_search + '\n\n')
@@ -167,9 +177,10 @@ def send():
                 ask_search = "Here you can filter courses based on parameters, mainly the number of credits or " \
                              "the quantitative scale (HQ, SQ or NQ for high, semi or no quantitative respectively). "
                 chatLog.insert(END, "BOT: " + ask_search + '\n\n')
-                ask_credits = "Enter the number of credits you look for:"
+                ask_credits = "Enter the number of credits and the quantitative scale with a space between them " \
+                              "(e.g. for 3 credits and highly quantitative, enter '3 HQ'):"
                 chatLog.insert(END, "BOT: " + ask_credits + '\n\n')
-                state = 12
+                state = 13
                 print(state)
             else:
                 print(state)
@@ -179,140 +190,109 @@ def send():
         elif state == 11:
             keyword_course = {"course_name": message}
             output = search_course_name(keyword_course)
-            print(type(output))
-            chatLog.insert(END, "BOT: " '\n')
-            for i in range(len(output)):
-                chatLog.insert(END, output[i] + '\n')
-            ask_search = "Would you like to search for another course?"
-            chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+            if output:
+                keyword_found = "Information about the keyword found:"
+                chatLog.insert(END, "BOT: " + keyword_found + '\n')
+                for i in range(len(output)):
+                    chatLog.insert(END, output[i] + '\n')
+                ask_search = "Would you like to search for another course?"
+                chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+            else:
+                bad_output = "No course was found based on your keyword. Would you like to search for another course?"
+                chatLog.insert(END, "BOT: " + bad_output + '\n\n')
             state = 14
 
-        elif state == 12:
-            information = {"course_credits": message}
-            ask_search = "Enter HQ, SQ or NQ to filter the quantitative scale: "
-            chatLog.insert(END, "BOT: " + ask_search + '\n\n')
-            state = 13
-
         elif state == 13:
-            information = {"course_quantitative": message}
+            input_message = message.split()
+            information = {}
+            information["course_credits"] = input_message[0]
+            information["course_quantitative"] = input_message[1]
             output = search_information(information)
-            print(type(output))
-            chatLog.insert(END, "BOT: " '\n')
-            for i in range(len(output)):
-                chatLog.insert(END, output[i] + '\n')
-            ask_search = "Would you like to search for another course?"
-            chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+            if output:
+                filter_found = 'Courses with your filters: ' + information["course_credits"] + " " + information["course_quantitative"]
+                chatLog.insert(END, "BOT: " + filter_found + '\n')
+                for i in range(len(output)):
+                    chatLog.insert(END, output[i] + '\n')
+                ask_search = "Would you like to search for another course?"
+                chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+            else:
+                bad_output = "No course was found based on your keyword. Would you like to search for another course?"
+                chatLog.insert(END, "BOT: " + bad_output + '\n\n')
             state = 14
 
         elif state == 14:
-            new_search = bool(distutils.util.strtobool(message))
-            print(new_search)
-            if new_search:
-                ask_search = "Type '1' to search by keyword and '2' by filters."
-                chatLog.insert(END, "BOT: " + ask_search + '\n\n')
-                state = 10
-            else:
-                ask_continue = "What can I do for you now?"
-                chatLog.insert(END, "BOT: " + ask_continue + '\n\n')
-                state = 0
+            try:
+                new_search = bool(distutils.util.strtobool(message))
+                if new_search:
+                    ask_search = "Type '1' to search by keyword and '2' by filters."
+                    chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+                    state = 1
+                    print(state)
+                else:
+                    ask_continue = "What can I do for you now?"
+                    chatLog.insert(END, "BOT: " + ask_continue + '\n\n')
+                    state = 0
+                    print(state)
+            except ValueError:
+                bad_input = "Sorry, I didn't understand that. Would you like to search for other courses (y/n) ?"
+                chatLog.insert(END, "BOT: " + bad_input + '\n\n')
 
         elif state == 2:
-            ask_search = "Here you can find professors based on keywords." \
-                         "\nThe search is made to match last names in any position of the word. " \
-                         "\nEnter a keyword to find professors:"
-            chatLog.insert(END, "BOT: " + ask_search + '\n\n')
-            state = 20
-
-        elif state == 20:
             print(state)
             keyword_professor = {"course_professor": message}
             output = search_professor_name(keyword_professor)
             print(type(output))
-            ask_search = "Would you like to search for another professor?"
-            chatLog.insert(END, "BOT: " + output + '\n'+ ask_search + '\n\n')
+            if output:
+                keyword_found = "Information about the keyword found: "
+                chatLog.insert(END, "BOT: " + keyword_found + '\n')
+                for i in range(len(output)):
+                    chatLog.insert(END, output[i] + '\n')
+                ask_search = "Would you like to search for another professor?"
+                chatLog.insert(END, "BOT: " + output + '\n'+ ask_search + '\n\n')
+            else:
+                bad_output = "No course was found based on your keyword. Would you like to search for another course?"
+                chatLog.insert(END, "BOT: " + bad_output + '\n\n')
             state = 21
 
+
         elif state == 21:
-            new_search = bool(distutils.util.strtobool(message))
-            print(new_search)
-            if new_search:
-                ask_search = "Enter a keyword to find professors:"
-                chatLog.insert(END, "BOT: " + ask_search + '\n\n')
-                state = 20
-            else:
-                ask_continue = "What can I do for you now?"
-                chatLog.insert(END, "BOT: " + ask_continue + '\n\n')
-                state = 0
+            try:
+                new_search = bool(distutils.util.strtobool(message))
+                print(new_search)
+                if new_search:
+                    ask_search = "Enter a keyword to find professors:"
+                    chatLog.insert(END, "BOT: " + ask_search + '\n\n')
+                    state = 2
+                else:
+                    ask_continue = "What can I do for you now?"
+                    chatLog.insert(END, "BOT: " + ask_continue + '\n\n')
+                    state = 0
+            except ValueError:
+                bad_input = "Sorry, I didn't understand that. Would you like to search for other courses (y/n) ?"
+                chatLog.insert(END, "BOT: " + bad_input + '\n\n')
 
-        # function search courses
-
-        # Try to open the log_chatbox.txt
-
-
-        # try:
-        #
-        #     df = pd.read_csv('log_chatbox.txt')
-        #
-        # # If it raises an error, create a new file with the column names
-        #
-        # except FileNotFoundError:
-        #
-        #     df = pd.DataFrame(columns=['Input', 'Output','Time','Date', 'Intents_predicted','Status','Language'])
-        #
-        # # Analyze what the model is predicting as well as the probability level
-        #
-        # reptest = predict_class(message, chatbot_model)
-        #
-        # # Create a new row for the log chatbox
-        #
-        # new_row = {'Input': message,  'Output': response,'Time':datetime.time(datetime.now()),'Date':datetime.date(datetime.now()), 'Intents_predicted': reptest[0]['intent'],'Probability prediction':reptest[0]['probability'], 'Status':'Student', 'Language':'EN'}
-        #
-        # # Append row of log to the dataframe
-        #
-        # df = df.append(new_row, ignore_index=True)
-        #
-        # # Save the CSV file with the new line
-        #
-        # df.to_csv('log_chatbox.txt',index=False)
-
-        # Output the message of the machine
-        
-        #chatLog.insert(END, "BOT: " + response + '\n\n') # Text box for the bot: prints the corresponding response
-
-        # Extract the link from the intent predicted
-
-        # ras = bot_response_link(message)
-        #
-        # # If there is no link, nothing happened
-        #
-        # if ras:
-        #
-        #     # If a link exists, it is opened in a browser
-        #
-        #     callback(ras)
-        #
-        #     # A message with the link is also put in the browser
-        #
-        #     chatLog.insert(END, "Bot: " + ras + '\n\n')
-            
         chatLog.config(state=DISABLED)
-        chatLog.yview(END) # End of the conversation
+        chatLog.yview(END)  # End of the conversation
 
 
 base = Tk()
 base.title("UNIL HEC Bot")
-base.geometry("400x500")
+base.geometry("600x600")
 base.resizable(width=FALSE, height=FALSE)
 
 # This will create the graphical interface for the chat window
 
-chatLog = Text(base, bd=0, bg="white", height="8", width="50", font="Arial")
+chatLog = Text(base, bd=0, bg="white", height="8", width="50", font="Arial", wrap=WORD)
+welcome_message = "Hello and welcome fellow student! Beep-boop-bop, I'm a bot serving the HEC faculty of the University of Lausanne. " \
+                  "Kind and clever, I could be useful too. Ask me anything you want about student life: courses, professors," \
+                  " directions, food... \nType 'help' anytime in the entry box to find a list of the things I can do!"
+chatLog.insert(END, "BOT: " + welcome_message + '\n\n')
 
 chatLog.config(state=DISABLED)
 
 # This will bind the scrollbar to the chat window
 
-scrollBar = Scrollbar(base, command=chatLog.yview, cursor="heart")
+scrollBar = Scrollbar(base, command=chatLog.yview, cursor="double_arrow")
 chatLog['yscrollcommand'] = scrollBar.set
 
 # This button will send the message to the program, to which the bot will respond
@@ -330,10 +310,10 @@ entryBox = Text(base, bd=0, bg="white", width="29", height="5", font="Arial")
 
 # Let's now place all components of the GUI on the screen
 
-scrollBar.place(x=376, y=6, height=386)
-chatLog.place(x=6, y=6, height=386, width=370)
-entryBox.place(x=128, y=401, height=90, width=265)
-sendButton.place(x=6, y=401, height=90)
+scrollBar.place(x=550, y=6, height=486)
+chatLog.place(x=6, y=6, height=486, width=500)
+entryBox.place(x=128, y=501, height=90, width=400)
+sendButton.place(x=6, y=501, height=90)
 
 # This will run the chatbot
 base.mainloop()
