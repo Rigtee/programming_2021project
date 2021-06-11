@@ -234,7 +234,18 @@ while state != 7:
     
     # The user is being asked what action he would like to perform
     
-    state = int(input("Enter number: "))
+    try:
+        
+        state = int(input("Enter number: "))
+
+
+    except ValueError:
+        
+        # raise an error when it is not an integer
+        
+        print("\n\n#########################################################################")
+        print("\nThis is not a number! Please try an integer between 1 and 7\n")
+        print("\n#########################################################################")
     
     # The first state is a generic view of the content of the whole dataset
     

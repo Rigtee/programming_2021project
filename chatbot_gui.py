@@ -12,6 +12,8 @@ import webbrowser # To open pages on a browser
 from courses import *
 import distutils.util
 
+
+        
 # import ssl
 #
 # try:
@@ -150,7 +152,31 @@ def send():
                 chatLog.insert(END, "BOT: " + response + '\n\n')
             else:
                 response = bot_response(message)
+                
+                try:
+                    
+                    df = pd.read_csv('log_chatbox.txt')
+                    
+                except FileNotFoundError:
+                    
+                    df = pd.DataFrame(columns=['Input', 'Output','Time','Date', 'Intents_predicted','Status','Language']) 
+                
+                reptest = predict_class(message, chatbot_model)
+                
+                new_row = {'Input': message,  'Output': response,'Time':datetime.time(datetime.now()),'Date':datetime.date(datetime.now()), 'Intents_predicted': reptest[0]['intent'],'Probability prediction':reptest[0]['probability'], 'Status':'Student', 'Language':'EN'}
+                #append row to the dataframe
+                df = df.append(new_row, ignore_index=True)
+                # Save the CSV file with the new line
+                df.to_csv('log_chatbox.txt',index=False)
+                
                 chatLog.insert(END, "BOT: " + response + '\n\n')
+                
+                """ras = bot_response_link(message)
+                
+                if ras:
+                    callback(ras)
+                    ChatLog.insert(END, "Bot: " + ras + '\n\n')"""   
+                    
                 course_response = intents["intents"][8]["responses"][0]  # last 0 needed to isolate element of list "responses", otherwise prints with []
                 professor_response = intents["intents"][9]["responses"][0]
                 if response == course_response:

@@ -6,7 +6,7 @@ from datetime import datetime # To have the current time
 
 # Load the txt file
 
-df = pd.read_csv('log_chatbox_test.txt')
+df = pd.read_csv('log_chatbox.txt')  # alternative ('log_chatbox_test.txt')
 
 # Set up a class with all the needed functions to manipulate the dataframe
 
@@ -144,6 +144,8 @@ class text_mod:
             
             for j in range(len(txt_log_filters)):
                 
+                # Use the function previously defined
+                
                 self.full_line_content(j,txt_log_filters)
                 
     def refresh(self):
@@ -171,22 +173,7 @@ class text_mod:
         
         return ("")
 
-# The class is used on the txt loaded file df
 
-text = text_mod(df)
-
-
-#print(text)
-text.limited_print(details=True)
-text.limited_print(details=False)
-text.limited_print(details=False,sort=True,type='date',ascending=False)
-text.limited_print(details=False,sort=True,type='prob',ascending=True)
-
-
-text.full_line_content(5)
-text.limited_log(ddl=30)
-text.limited_log(ddh=27)
-text.refresh()
 
 # The class is used on the txt loaded file df
 
@@ -233,11 +220,11 @@ while state != 5:
 
     except ValueError:
         
+        # raise an error when it is not an integer
+        
         print("\n\n#########################################################################")
         print("\nThis is not a number! Please try an integer between 1 and 5\n")
         print("\n#########################################################################")
-    
-    #♣state = int(input("Enter number: "))
     
     # The first state is a generic view of the content of the whole dataset
     
@@ -257,14 +244,20 @@ while state != 5:
         
         probl_default = 0
         probh_default = 1 
+        
         yyyyl_default = 1999
         yyyyh_default = 2022
+        
         mml_default = 0
         mmh_default = 12
+        
         ddl_default = 1
         ddh_default = 31
+        
         hhl_default = 0
         hhh_default= 24
+        
+        # Filter by date option
 
         message = input("Do you want to filter logs using date? (y/n): ")
     
@@ -376,6 +369,8 @@ while state != 5:
                     
                     print("\nThis is not a correct number!\n")
                     
+                    
+        # Filter by predicted model certainty option
 
 
         message = input("Do you want to select logs using the predicted model certainty? (y/n): ")
@@ -407,6 +402,8 @@ while state != 5:
 
         print("\n")                  
                 
+        # Use the function with the different parameters
+        
         text.limited_log(probl_default, probh_default, yyyyl_default, yyyyh_default, mml_default, mmh_default, ddl_default, ddh_default, hhl_default, hhh_default)
 
         
@@ -420,11 +417,15 @@ while state != 5:
         type_ = 'date'
         ascending = False
         
+        # Detailed option
+        
         message = input("Do you want to view results with a detailed view? (y/n): ")
     
         if message == "y":
                 
             details = True
+            
+        # Sorting options
             
         message = input("Do you want to sort results? (y/n): ")
     
@@ -468,6 +469,8 @@ while state != 5:
         print("\nThe filtered dataframe has been refreshed!")
 
     elif state==5:
+        
+        # A polite bot
 
         print("\nGood day to you!")        
     

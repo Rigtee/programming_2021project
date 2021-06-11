@@ -34,3 +34,25 @@ help,"I'm a versatile bot, I could do many things for you like:
  - Describing the process to get a visa for Switzerland
  - ...
  The importance is to be clear about the thing you're looking for! If you do so, my robot neural net will be able to process information more efficiently to provide you with an accurate answer. What can I do for you now?",11:20:01.741639,2021-06-11,options,Student,EN,0.9901125
+hello!,Hello there future student!,21:57:27.498307,2021-06-11,greeting,Student,EN,0.518803
+I would like information on a scholarship,"Yes, scholarships are indeed available for students with outstanding records. Unil grants for instance 10 scholarships every year. The deadline is the 1st begining of Novemeber. Others are also available as well but depends of your future studies. Please take a look at the different opportunities on the repsective pages",21:57:47.064293,2021-06-11,scholarship,Student,EN,0.8640243000000001
+I would like to search for a course,Swiss students as well as residents from the Schengen Area do not need a visa. Other students do and application must be done several months in advance. The student should be able to prove he can sustain itself (2100 CHF per month). See the link for further information,21:59:20.684373,2021-06-11,visa,Student,EN,0.76462
+I want to search for courses,Please let me help you to find information about professors. I can search professors based on keywords.,21:59:54.018593,2021-06-11,professors,Student,EN,0.70663524
+Hello dear!,Hello!,22:14:17.812172,2021-06-11,greeting,Student,EN,0.518803
+I would like to search for a course,Swiss students as well as residents from the Schengen Area do not need a visa. Other students do and application must be done several months in advance. The student should be able to prove he can sustain itself (2100 CHF per month). See the link for further information,22:14:33.287567,2021-06-11,visa,Student,EN,0.76462
+What are the courses available for the semester,Please let me help you to find information about courses. I can search courses based on keywords or filters.,22:15:07.955012,2021-06-11,courses,Student,EN,0.9999995
+Where can I find new courses?,Please let me help you to find information about courses. I can search courses based on keywords or filters.,22:18:37.678245,2021-06-11,courses,Student,EN,0.999884
+loss,Hello!,22:18:49.621338,2021-06-11,greeting,Student,EN,0.59835386
+Where can I find new courses?,Please let me help you to find information about courses. I can search courses based on keywords or filters.,22:20:47.083803,2021-06-11,courses,Student,EN,0.999884
+y,Hoy hoy!,22:20:54.533025,2021-06-11,greeting,Student,EN,0.59835386
+Where can I find new courses?,Please let me help you to find information about courses. I can search courses based on keywords or filters.,22:21:04.081547,2021-06-11,courses,Student,EN,0.999884
+yes,Hello there future student!,22:21:10.347654,2021-06-11,greeting,Student,EN,0.59835386
+Where can I find new courses?,Please let me help you to find information about courses. I can search courses based on keywords or filters.,22:22:15.013009,2021-06-11,courses,Student,EN,0.999884
+yes,Hello there future student!,22:22:19.471372,2021-06-11,greeting,Student,EN,0.59835386
+Where can I find new courses?,Please let me help you to find information about courses. I can search courses based on keywords or filters.,22:23:25.389902,2021-06-11,courses,Student,EN,0.999884
+yes,"Hi there, what can I do for you?",22:23:36.585218,2021-06-11,greeting,Student,EN,0.59835386
+Where can I find new courses?,Please let me help you to find information about courses. I can search courses based on keywords or filters.,22:28:06.081215,2021-06-11,courses,Student,EN,0.999884
+Where can I find new courses?,Please let me help you to find information about courses. I can search courses based on keywords or filters.,22:28:56.811674,2021-06-11,courses,Student,EN,0.999884
+yes,Hoy hoy!,22:29:11.427479,2021-06-11,greeting,Student,EN,0.59835386
+Where can I find new courses?,Please let me help you to find information about courses. I can search courses based on keywords or filters.,22:29:48.539844,2021-06-11,courses,Student,EN,0.999884
+Where can I find new courses?,Please let me help you to find information about courses. I can search courses based on keywords or filters.,22:30:31.902894,2021-06-11,courses,Student,EN,0.999884
