@@ -124,22 +124,13 @@ def search_information(params):
     if len(params) > 0:
         filters = ['{}=?'.format(k) for k in params]
         query += ' WHERE ' + ' AND '.join(filters)
-    else:
-        result = 'Please specify parameters to search in the database.'
-        return result
     t = tuple(params.values())
     c = conn.cursor()
     c.execute(query, t)
     search_result = []
     for row in c:
         search_result.append(row[1])
-    print(search_result)
-    if search_result:
-        print('Courses found: ')
-        return search_result
-    else:
-        search_result = 'No course was found based on your search criteria.'
-        return search_result
+    return search_result
 
 def search_course_name(params):
     if len(params) > 0:
@@ -159,27 +150,20 @@ def search_course_name(params):
         search_result.append(row[2])
         search_result.append(row[3])
         search_result.append(row[4])
-    print(search_result)
-    if search_result:
-        print('Information about the keyword found: ')
-        course = [search_result[i:i+4] for i in range(0, len(search_result), 4)]
-        print(course)
-        results = []
-        for el in course:
-            if el[3] == "HQ":
-                el[3] = "highly quantitative"
-            elif el[3] == "SQ":
-                el[3] = "semi quantitative"
-            elif el[3] == "NQ":
-                el[3] = "non quantitative"
+    course = [search_result[i:i+4] for i in range(0, len(search_result), 4)]
+    results = []
+    for el in course:
+        if el[3] == "HQ":
+            el[3] = "highly quantitative"
+        elif el[3] == "SQ":
+            el[3] = "semi quantitative"
+        elif el[3] == "NQ":
+            el[3] = "non quantitative"
 
-            result = ("{course_name} given by {course_professor}, {course_credits} credits and having a {course_quantitative} scale."
-            .format(course_name = el[0], course_professor = el[1], course_credits = el[2], course_quantitative = el[3]))
-            results.append(result)
-        return results
-    else:
-        result = "No course was found based on your keyword."
-        return result
+        result = ("{course_name} given by {course_professor}, {course_credits} credits and having a {course_quantitative} scale."
+        .format(course_name = el[0], course_professor = el[1], course_credits = el[2], course_quantitative = el[3]))
+        results.append(result)
+    return results
 
 
 def search_professor_name(params):
@@ -200,24 +184,21 @@ def search_professor_name(params):
         search_result.append(row[2])
         search_result.append(row[3])
         search_result.append(row[4])
-    if search_result:
-        print('Information about the keyword found: ')
-        course = [search_result[i:i+4] for i in range(0, len(search_result), 4)]
-        for el in course:
-            if el[3] == "HQ":
-                el[3] = "highly quantitative"
-            elif el[3] == "SQ":
-                el[3] = "semi quantitative"
-            elif el[3] == "NQ":
-                el[3] = "non quantitative"
+    course = [search_result[i:i+4] for i in range(0, len(search_result), 4)]
+    results = []
+    for el in course:
+        if el[3] == "HQ":
+            el[3] = "highly quantitative"
+        elif el[3] == "SQ":
+            el[3] = "semi quantitative"
+        elif el[3] == "NQ":
+            el[3] = "non quantitative"
         result = ("{course_professor} gives the course {course_name} of {course_credits} credits "
                   "which has a {course_quantitative} scale."
                   .format(course_professor = el[1], course_name = el[0],
                                                           course_credits = el[2], course_quantitative = el[3]))
-        return result
-    else:
-        result = "No professor was found based on your keyword."
-        return result
+        results.append(result)
+    return results
 
 
 

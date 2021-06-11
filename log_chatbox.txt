@@ -26,3 +26,11 @@ Where can I find new courses?,Please let me help you to find information about c
 Bring it on,Any time!,16:00:51.741523,2021-06-05,thanks,Student,EN,0.34561378
 Hello,Hello there future student!,16:20:51.584232,2021-06-05,greeting,Student,EN,0.24555483
 I want to search for courses,Please let me help you to find information about professors. I can search professors based on keywords.,16:21:11.809943,2021-06-05,professors,Student,EN,0.85898274
+help,"Offering support for Adverse drug reaction, Blood pressure, Hospitals and Pharmacies",11:12:00.705645,2021-06-11,options,Student,EN,0.9901125
+help,"I'm a versatile bot, I could do many things for you like:
+ - Searching in the database of HEC courses
+ - Finding a professor among the faculty
+ - Giving you information about student housing
+ - Describing the process to get a visa for Switzerland
+ - ...
+ The importance is to be clear about the thing you're looking for! If you do so, my robot neural net will be able to process information more efficiently to provide you with an accurate answer. What can I do for you now?",11:20:01.741639,2021-06-11,options,Student,EN,0.9901125
